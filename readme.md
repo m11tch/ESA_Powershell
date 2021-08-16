@@ -36,7 +36,8 @@ Usage:
 **esaExportUsersAllRealmsToCSV.ps1**
 1. insert credentials / server adress in esaExportUsersToCSV.ps1
 2. run esaExportUsersAllRealmsToCSV.ps1
-3. 
+
+
 **esaCsvImporter.ps1**
 1. get the correct realm id by using `esa.ps1 getrealms`
 2. insert realmid in 'esaCsvImporter.ps1':
