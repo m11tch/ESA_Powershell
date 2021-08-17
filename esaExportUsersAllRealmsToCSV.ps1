@@ -38,6 +38,9 @@ function getRealms {
         Authorization = $basicAuthValue
     }
     $Url = "https://"+ $server + ":8001/manage/v2/GetRealms"
+    
+    $ContentType = "application/json"
+    
     $Body = @{
 
     "withUserCount" = "true" 
