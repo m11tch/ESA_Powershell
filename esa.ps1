@@ -15,19 +15,14 @@ Enabling 2fa for user:
         esa.ps1 set username SoftTokensPush realmid
         esa.ps1 set username HardTokens realmid
         
-
 Assigning hardtoken to user:
     esa.ps1 hardtoken username serialnumber realmid
-
 Provisioning user (send SMS) 
     esa.ps1 provision username realmid
-
 Deprovision user
     esa.ps1 deprovision username realmid
-
 get Realm ID's
     esa.ps1 getrealms
-
 Force realm force realm sync
     esa.ps1 forcerealmsync realmid
 List all users in realm:
@@ -166,10 +161,48 @@ $Body = @{
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
                 [System.Globalization.NumberStyles]::HexNumber))).ToString() } )}
 
+} elseif ($args[0] -eq "reportusersperrealm") {
+$reportdata = @()
+$Url = "https://"+ $server + ":8001/manage/v2/GetRealms"
+$ContentType = "application/json"
+$Body = @{
+
+"withUserCount" = "true" 
+     
+} | ConvertTo-Json
+
+$realms = Invoke-RestMethod -Method Post -ContentType $ContentType -Uri $Url -Body $Body -Headers $Headers 
+
+foreach ($realm in $realms) {
+   
+    $Url = "https://"+ $server + ":8001/manage/v2/GetUserList"
+    $Body = @{
+
+
+"realm" = @{
+    Type = "auth"
+    Id = $realm.Realm.id
+    }
+     
+} | ConvertTo-Json
+
+$realmusers = Invoke-RestMethod -Method Post -ContentType $ContentType -Uri $Url -Body $Body -Headers $Headers 
+$realmusers2FA = $realmusers | Where-Object -Property TwoFactorAuthenabled -Match 'True'
+
+$realmname = $realm.Realm.name
+$realmUserCount2FA = $realmusers2FA.count
+
+$reportdata += [pscustomobject]@{Realm=$realmname;Count=$realmUserCount2FA}
+
 }
+
+$reportdata
+exit
+}
+
+
 $ContentType = "application/json"
 
 # Now, run the Invoke-RestMethod command with all variables in place
 Invoke-RestMethod -Method Post -ContentType $ContentType -Uri $url -Body $Body -Headers $Headers 
 }
-
