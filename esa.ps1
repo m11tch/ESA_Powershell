@@ -193,8 +193,8 @@ $realmusers2FA = $realmusers | Where-Object -Property TwoFactorAuthenabled -Matc
 
 $realmname = $realm.Realm.name
 $realmUserCount2FA = $realmusers2FA.count
-if ($realmUserCount2FA -eq $Null) { #fix for empty realms
-    $realmUserCount2FA = "0"
+if ($realmUserCount2FA -eq $Null) { #fix for realms with only 1 user
+    $realmUserCount2FA = "1"
 }
 $reportdata += [pscustomobject]@{Realm=$realmname;Count=$realmUserCount2FA}
 
