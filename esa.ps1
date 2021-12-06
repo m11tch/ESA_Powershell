@@ -27,6 +27,8 @@ Force realm force realm sync
     esa.ps1 forcerealmsync realmid
 List all users in realm:
     esa.ps1 getuserlist realmid
+Report number of 2FA Enabled users per realm
+    esa.ps1 reportusersperrealm
 "@
 echo $UsageExample
 } else {
